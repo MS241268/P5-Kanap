@@ -5,6 +5,7 @@ const idCurrentPageProduct = urlProduct.searchParams.get("id");
 console.log(idCurrentPageProduct);
 
 const urlApi=`http://localhost:3000/api/products`; 
+
 // Requête API
 fetch(urlApi)
     .then((response) =>
@@ -39,8 +40,13 @@ fetch(urlApi)
                     console.log(displayProduct);
                     document.querySelector("#description").innerHTML = displayProduct;//Implémentation de la description du produit dans la page produit.html
 
-                    /*!!!!!!-------------Couleurs à intégrer----------------!!!!!!*/
-                    /*-------*/
+                    //Gestion des options de couleurs du produit sélectionné
+                    let displayOptionColorProduct ='';
+                    for(let colorsProduct of lineProductOfArray.colors){ // Boucle pour connaître les couleurs du produit sélectionné
+                        console.log(colorsProduct);
+                        displayOptionColorProduct += `<option value="${colorsProduct}">${colorsProduct}</option>`;
+                        document.querySelector("#colors").innerHTML = displayOptionColorProduct;//Implémentation des couleurs dans le menudéroulant
+                    }
                     break;
                 };
         }
