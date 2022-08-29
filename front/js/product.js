@@ -44,8 +44,10 @@ fetch(urlApi)
                     let displayOptionColorProduct ='';
                     for(let colorsProduct of lineProductOfArray.colors){ // Boucle pour connaître les couleurs du produit sélectionné
                         console.log(colorsProduct);
-                        displayOptionColorProduct += `<option value="${colorsProduct}">${colorsProduct}</option>`;
-                        document.querySelector("#colors").innerHTML = displayOptionColorProduct;//Implémentation des couleurs dans le menudéroulant
+                        //displayOptionColorProduct += `<option value="${colorsProduct}">${colorsProduct}</option>`;
+                        let baliseSelect=document.getElementById('colors')
+                        //document.querySelector("#colors").innerHTML = displayOptionColorProduct;//Implémentation des couleurs dans le menudéroulant
+                        baliseSelect.insertAdjacentHTML('beforeend', `<option value="${colorsProduct}">${colorsProduct}</option>`)//Implémentation des couleurs dans le menudéroulant
                     }
                     break;
                 };
