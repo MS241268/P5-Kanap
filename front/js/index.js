@@ -7,7 +7,7 @@ fetch(urlApi)
 
 // Collecte des infos de chaque produit et création des balises html
         for(let product of dataProducts){ // Boucle pour connaître le nombre d'items dans le tableau
-            const displayProduct = `
+            const displayProducts = `
                             <a href="./product.html?id=${product._id}">
                                 <article>
                                     <img src=${product.imageUrl} alt="${product.altTxt}">
@@ -16,7 +16,7 @@ fetch(urlApi)
                                 </article>
                             </a>`;
             // Implémentation dans la section #items de la page index.html
-            document.querySelector("#items").insertAdjacentHTML("beforeend", displayProduct);
+            document.querySelector("#items").insertAdjacentHTML("beforeend", displayProducts);
         }
         })
     ).catch((error) => alert('Erreur Serveur : '+ error)); // Alerte erreur serveur
