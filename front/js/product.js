@@ -4,53 +4,43 @@ const urlProduct = new URL(currentPageProduct);
 const idCurrentPageProduct = urlProduct.searchParams.get("id");
 console.log(idCurrentPageProduct);
 
-const urlApi=`http://localhost:3000/api/products`; 
+const urlApi = `http://localhost:3000/api/products/${idCurrentPageProduct}`; 
+console.log(urlApi);
 
-// Requête API
+// Get datas from one product
 fetch(urlApi)
     .then((response) =>
-        response.json().then((dataProducts) => {
-        console.log(dataProducts);
+        response.json().then((dataProduct) => {
 
-        let numberOfProducts = dataProducts.length;//Longueur du tableau : nombre d'items dans le tableau
-        console.log(numberOfProducts);
+        document.title = dataProduct.name;
+        document.querySelector(".item__img").innerHTML = `<img src=${dataProduct.imageUrl} alt="${dataProduct.altTxt}">`;//Implémentation de l'image du produit dans la page produit.html
+        document.querySelector("#title").innerHTML = dataProduct.name;//Implémentation du nom du produit dans la page produit.html
+        document.querySelector("#price").innerHTML = dataProduct.price;//Implémentation du prix du produit dans la page produit.html
+        document.querySelector("#description").innerHTML = dataProduct.description;//Implémentation de la description du produit dans la page produit.html*/
 
-        for(let i = 0; i < numberOfProducts ;i +=1){//Boucle vérification Id produit tableau vs Id produit page courante
-            console.log('boucle : '+i);
-            let lineProductOfArray = dataProducts[i];//N° de ligne du tableau
-            console.log(lineProductOfArray);
-            let idProductOfArray=lineProductOfArray._id;//Récupération de l'Id produit du tableau
-            console.log(idProductOfArray);
+        //Gestion des options de couleurs du produit sélectionné
+        for(let colorsProduct of dataProduct.colors){ // Boucle pour connaître les couleurs du produit sélectionné
+            console.log(colorsProduct);
+            let listColorProduct = document.getElementById("colors")//Liste des couleurs dispos selon le produit
+            listColorProduct.insertAdjacentHTML("beforeend", `<option value="${colorsProduct}">${colorsProduct}</option>`)};//Implémentation des couleurs dans le menu déroulant        
+        })
+        ).catch((error) => alert("Erreur Serveur : "+ error)); // Alerte erreur serveur
 
-                if (idProductOfArray==idCurrentPageProduct){//Condition qui vérifie si l'Id produit du tableau est égale à l'Id produit de la page courante
 
-                    displayProduct = `<img src=${lineProductOfArray.imageUrl} alt="${lineProductOfArray.altTxt}">`;//Affichage de l'image du produit
-                    console.log(displayProduct);
-                    document.querySelector(".item__img").innerHTML = displayProduct;//Implémentation de l'image du produit dans la page produit.html
+// Ajouter un eventlistener sur le bouton
+        /* let toto ="toto";
+         console.log(toto);
+         localStorage.setItem('tata','rthgh');
+         localStorage.setItem('tato','rthy');
+        console.log(localStorage.length + 1);*/
 
-                    displayProduct = `${lineProductOfArray.name}`;//Affichage du nom du produit
-                    console.log(displayProduct);
-                    document.querySelector("#title").innerHTML = displayProduct;//Implémentation du nom du produit dans la page produit.html
-                    
-                    displayProduct = `${lineProductOfArray.price}`;//Affichage du prix du produit
-                    console.log(displayProduct);
-                    document.querySelector("#price").innerHTML = displayProduct;//Implémentation du prix du produit dans la page produit.html
-
-                    displayProduct = `${lineProductOfArray.description}`;//Affichage de la description du produit
-                    console.log(displayProduct);
-                    document.querySelector("#description").innerHTML = displayProduct;//Implémentation de la description du produit dans la page produit.html
-
-                    //Gestion des options de couleurs du produit sélectionné
-                    let displayOptionColorProduct ='';
-                    for(let colorsProduct of lineProductOfArray.colors){ // Boucle pour connaître les couleurs du produit sélectionné
-                        console.log(colorsProduct);
-                        //displayOptionColorProduct += `<option value="${colorsProduct}">${colorsProduct}</option>`;
-                        let baliseSelect=document.getElementById('colors')
-                        //document.querySelector("#colors").innerHTML = displayOptionColorProduct;//Implémentation des couleurs dans le menudéroulant
-                        baliseSelect.insertAdjacentHTML('beforeend', `<option value="${colorsProduct}">${colorsProduct}</option>`)//Implémentation des couleurs dans le menudéroulant
-                    }
-                    break;
-                };
-        }
-    })
-).catch((error) => alert('Erreur Serveur : '+ error)); // Alerte erreur serveur
+/* ATTENTION!!!!!!: quand click sur ajouter au panier faire ce qui suit*/
+                        /*let quantityProduct= parseInt(document.getElementById('quantity').value);//Transfomation Txt en Nombre
+                        
+                        let recapProduct = new Array(
+                            `${lineProductOfArray._id}`,
+                            `${lineProductOfArray.name}`,
+                            `${lineProductOfArray.price}`,
+                            //`${choiceColorProduct}`,
+                            `${quantityProduct}`,
+                        );console.log(recapProduct);*/
