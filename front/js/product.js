@@ -25,18 +25,19 @@ fetch(urlApi)
 // Ajouter un eventlistener sur le bouton
 const addBasket = document.getElementById("addToCart");
 addBasket.addEventListener('click',() => {
-
     const nameProduct = document.getElementById("title").innerText;
     const listColorProduct = document.getElementById("colors");
     const selectedColorProduct = listColorProduct.options[listColorProduct.selectedIndex].text;
+    const imageProduct = document.querySelector(".item__img").innerHTML;
 
     if (selectedColorProduct == "--SVP, choisissez une couleur --"){
         alert("Veuillez choisir une couleur pour ce produit");
     };
 
     const quantityProduct = parseInt(document.getElementById('quantity').value);//Transfomation Txt en Nombre
-    if (quantityProduct > 100){
-        alert("Vous pouvez choisir jusqu'à 100 articles maximum");
+    console.log(quantityProduct);
+    if (quantityProduct > 100 || quantityProduct < 1){
+        alert("La quantité pour ce produit doit être comprise entre 1 et 100 maximum");
     };
 
     if (selectedColorProduct != "--SVP, choisissez une couleur --" && quantityProduct <= 100){
@@ -46,11 +47,15 @@ addBasket.addEventListener('click',() => {
         name : nameProduct,
         color : selectedColorProduct,
         quantity : quantityProduct,
+        image : imageProduct,
     };
     let arrayBasketProducts = [];
     if (localStorage.getItem("basketProducts") == null){//Vérification si le local storage est vide
-        arrayBasketProducts.push(recapProduct)
-        localStorage.setItem("basketProducts", JSON.stringify(arrayBasketProducts));//Ajout du 1er produit dans le local storage
+        if (recapProduct.quantity > 0 && recapProduct.quantity <= 100 ){;
+            arrayBasketProducts.push(recapProduct);
+            localStorage.setItem("basketProducts", JSON.stringify(arrayBasketProducts));//Ajout du 1er produit dans le local storage
+            alert("Produit(s) ajouté(s) dans votre panier")
+        }
     }else{
         let arrayBasketProducts = JSON.parse(localStorage.getItem("basketProducts"));
         let foundIdProduct = arrayBasketProducts.find(p => p.id == recapProduct.id);//Vérification si l'Id produit existe dans le local storage
@@ -60,13 +65,20 @@ addBasket.addEventListener('click',() => {
             for(let i = 0; i < arrayBasketProducts.length; i++){//Boucle pour séléctionner le bon Id produit avec la bonne couleur
                 if (arrayBasketProducts[i].id == recapProduct.id && arrayBasketProducts[i].color == recapProduct.color){//Vérification du bon Id produit et de la bonne couleur
                     arrayBasketProducts[i].quantity = arrayBasketProducts[i].quantity + recapProduct.quantity;
-                    localStorage.setItem("basketProducts",JSON.stringify(arrayBasketProducts));//Injection du produit avec la nouvelle quantité
-                    
+                    if (arrayBasketProducts[i].quantity > 100){
+                        alert("La quantité pour ce produit ne doit pas dépasser 100");
+                        break;
+                    }
+                localStorage.setItem("basketProducts",JSON.stringify(arrayBasketProducts));//Injection du produit avec la nouvelle quantité
+                alert("Produit(s) ajouté(s) dans votre panier")
                 };console.log(arrayBasketProducts.length,arrayBasketProducts[i].id,arrayBasketProducts[i].color);
             };
         }else{//Condition si l'Id ou la couleur du produit n'existent pas dans le local storage
-            arrayBasketProducts.push(recapProduct);
-            localStorage.setItem("basketProducts",JSON.stringify(arrayBasketProducts));
+            if (recapProduct.quantity > 0 && recapProduct.quantity <= 100 ){;
+                arrayBasketProducts.push(recapProduct);
+                localStorage.setItem("basketProducts", JSON.stringify(arrayBasketProducts));//Ajout du 1er produit dans le local storage
+                alert("Produit(s) ajouté(s) dans votre panier")
+            }
         };
     };
     };
