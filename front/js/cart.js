@@ -19,29 +19,29 @@ maVariable = condition à tester ? valeur définie si la condition est remplie :
 // Pour faire une correlation utiliser findIndex
 */
  
-if(arrayBasketProducts.length > 0){
-    getDatasFromAPI()
-}
+if(arrayBasketProducts.length > 0){;
+    getDatasFromAPI();
+};
 
-async function getDatasFromAPI(){
-    const urlApi = await fetch(`http://localhost:3000/api/products`)
+async function getDatasFromAPI(){;
+    const urlApi = await fetch(`http://localhost:3000/api/products`);
     const datasProductsApi = await urlApi.json();// Jean Louis => response
 
 // initialiser les données sur la variable datas
-    init(datasProductsApi)// Jean Louis => response
+    init(datasProductsApi);// Jean Louis => response
 /****/
 
 // Fonction qui afficher le panier
-    showCart(datasProductsApi)// Jean Louis => response
+    showCart(datasProductsApi);// Jean Louis => response
 /****/
 
 // Suppression d'un produit
 const nbreDeleteItem = document.querySelectorAll(".deleteItem");
 
-for (let i = 0; i < nbreDeleteItem.length; i++){
-    nbreDeleteItem[i].addEventListener("click",() =>{
+for (let i = 0; i < nbreDeleteItem.length; i++){;
+    nbreDeleteItem[i].addEventListener("click",() =>{;
         let indexDeletedProduct = arrayBasketProducts.indexOf(arrayBasketProducts[i]);//Détermination de l'index du produit qui a été supprimé
-        arrayBasketProducts.splice(indexDeletedProduct,1)//Retrait du  produit supprimé dans le localStorage
+        arrayBasketProducts.splice(indexDeletedProduct,1);//Retrait du  produit supprimé dans le localStorage
         localStorage.setItem("basketProducts",JSON.stringify(arrayBasketProducts));//Injection dans le localStorage
         
         const elementParent = nbreDeleteItem[i].closest("article");//Recherche du parent "article" pour le produit supprimé
@@ -62,26 +62,29 @@ for (let i = 0; i < nbreDeleteItem.length; i++){
 /****/
 
 // Modification de la quantité d'un produit
-let baliseQuantityProduct = document.querySelectorAll(".itemQuantity")
-let articleProduct = document.querySelectorAll(".cart__item")
+let baliseQuantityProduct = document.querySelectorAll(".itemQuantity");
+let articleProduct = document.querySelectorAll(".cart__item");
 
-for (baliseQuantityProduct of articleProduct){
-    baliseQuantityProduct.addEventListener("change",changeQuantity)
+for (baliseQuantityProduct of articleProduct){;
+    baliseQuantityProduct.addEventListener("change",changeQuantity);
 }
 
-function changeQuantity(){
-    let idProduct = this.dataset.id
-    let colorProduct = this.dataset.color
-    let quantityProduct = parseInt(this.querySelector(".itemQuantity").value)
+function changeQuantity(){;
+    let idProduct = this.dataset.id;
+    let colorProduct = this.dataset.color;
+    let quantityProduct = parseInt(this.querySelector(".itemQuantity").value);
 
-    for(let i = 0; i < arrayBasketProducts.length; i++){//Boucle pour séléctionner le bon Id produit avec la bonne couleur
-        if (arrayBasketProducts[i].id == idProduct && arrayBasketProducts[i].color == colorProduct){;//Vérification du bon Id produit et de la bonne couleur
-            console.log(quantityProduct)
-            arrayBasketProducts[i].quantity = quantityProduct;
-            localStorage.setItem("basketProducts",JSON.stringify(arrayBasketProducts));//Injection du produit avec la nouvelle quantité
-            alert("Quantité modifiée");
+    if (quantityProduct > 0 && quantityProduct <= 100){;
+        for(let i = 0; i < arrayBasketProducts.length; i++){;//Boucle pour séléctionner le bon Id produit avec la bonne couleur
+            if (arrayBasketProducts[i].id == idProduct && arrayBasketProducts[i].color == colorProduct){;//Vérification du bon Id produit et de la bonne couleur
+                arrayBasketProducts[i].quantity = quantityProduct;
+                localStorage.setItem("basketProducts",JSON.stringify(arrayBasketProducts));//Injection du produit avec la nouvelle quantité
+                alert("Quantité modifiée");
+            };
         };
-    };
+    }else{;
+        alert("La quantité pour ce produit doit être comprise entre 1 et 100 maximum");
+    }
 totalOrder();
 }
 /****/
