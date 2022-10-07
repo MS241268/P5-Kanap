@@ -247,7 +247,7 @@ formContact.addEventListener("submit",(e) =>{
                 document.location = `./confirmation.html?orderId=${data.orderId}`
 
             })
-            .catch((error) => alert('Erreur Serveur : '+ error)); // Alerte erreur serveur
+            .catch((error) => alert('Erreur Serveur : '+ error)) // Alerte erreur serveur
     }else{
         alert("Vous devez commander minimum 1 produit")
     }

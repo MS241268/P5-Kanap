@@ -1,4 +1,4 @@
-const urlApi = `http://localhost:3000/api/products`; 
+const urlApi = `http://localhost:3000/api/products` 
 
 // Get product data from API
 fetch(urlApi)
@@ -14,10 +14,10 @@ fetch(urlApi)
                                     <h3 class="productName">${product.name}</h3>
                                     <p class="productDescription">${product.description}</p>
                                 </article>
-                            </a>`;
+                            </a>`
             // Implémentation dans la section #items de la page index.html
-            document.querySelector("#items").insertAdjacentHTML("beforeend", displayProducts);
+            document.querySelector("#items").insertAdjacentHTML("beforeend", displayProducts)
         }
         })
-    ).catch((error) => alert('Erreur Serveur : '+ error)); // Alerte erreur serveur
+    ).catch((error) => alert('Erreur Serveur : '+ error)) // Alerte erreur serveur
 
