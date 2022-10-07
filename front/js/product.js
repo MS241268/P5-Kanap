@@ -1,7 +1,6 @@
-const currentPageProduct = window.location.href;
-const urlProduct = new URL(currentPageProduct);
-const idCurrentPageProduct = urlProduct.searchParams.get("id");
-const urlApi = `http://localhost:3000/api/products/${idCurrentPageProduct}`; 
+const parameter = (new URL(document.location)).searchParams;//Chargement des paramètres de l'URL
+const idCurrentPageProduct = parameter.get("id");//Recherche du parametre "id" dans l'URL
+const urlApi = `http://localhost:3000/api/products/${idCurrentPageProduct}`;//Chargement des caractéristiques du produit depuis l'API
 let arrayProductsLs = [];//Initialisation du tableau dans le localStorage
 
 // Get datas from one product
@@ -52,9 +51,9 @@ addBasket.addEventListener('click',() => {
         image : imageProduct,
     };
 
-    productInLocalStorage = () => {
+   /* productInLocalStorage = () => {
         
-    } 
+    } */
 
     if (localStorage.getItem("basketProducts") == null){//Vérification si le localStorage est vide
         if (recapProduct.quantity > 0 && recapProduct.quantity <= 100 ){;
