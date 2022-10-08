@@ -3,7 +3,7 @@ const idCurrentPageProduct = parameter.get("id")//Recherche du parametre "id" da
 const urlApi = `http://localhost:3000/api/products/${idCurrentPageProduct}`//Chargement des caractéristiques du produit depuis l'API
 let arrayProductsLs = []//Initialisation du tableau dans le localStorage
 
-// Get datas from one product
+// Obtention des données d'un produit
 fetch(urlApi)
     .then((response) =>
         response.json()
@@ -22,7 +22,7 @@ fetch(urlApi)
         })
         ).catch((error) => alert("Erreur Serveur : " + error)) // Alerte erreur serveur
         
-// Ajouter un eventlistener sur le bouton
+// Ajout d'un eventlistener sur le bouton
 const addBasket = document.getElementById("addToCart")
 addBasket.addEventListener('click',() => {
     const nameProduct = document.getElementById("title").innerText
@@ -50,10 +50,6 @@ addBasket.addEventListener('click',() => {
         quantity : quantityProduct,
         image : imageProduct,
     }
-
-   /* productInLocalStorage = () => {
-        
-    } */
 
     if (localStorage.getItem("basketProducts") == null){//Vérification si le localStorage est vide
         if (recapProduct.quantity > 0 && recapProduct.quantity <= 100 ){

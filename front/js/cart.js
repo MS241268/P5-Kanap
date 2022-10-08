@@ -12,7 +12,7 @@ async function getDatasFromAPI(){
     const urlApi = await fetch(`http://localhost:3000/api/products`)
     const datasProductsApi = await urlApi.json()
 
-// initialiser les données sur la variable datas
+// Initialisation des données sur la variable datasProductsApi
     init(datasProductsApi)
 /****/
 
@@ -23,7 +23,7 @@ async function getDatasFromAPI(){
 // Suppression d'un produit
 const nbreDeleteItem = document.querySelectorAll(".deleteItem")
 nbreDeleteItem.forEach((item) => {
-    // Sur chacun des éléments, ajouter un eventlistener
+//Sur chacun des éléments, ajout d'un eventlistener
     item.addEventListener('click', (el) => {
         // Suppression de l'élément en fonction de son dataset
 
@@ -85,8 +85,7 @@ totalOrder()
 }
 
 function init(datas){
-    datasProductsApi = datas//Jean Louis => datas
-    //console.log(datasProductsApi)
+    datasProductsApi = datas
 }
 
 //Calcul du total commande
@@ -152,16 +151,13 @@ function showCart(){
     }
 /****/
     totalOrder ()
-        // dans la boucle for : utilisation de findIndex pour afficher le prix
-        
-    // APRES la boucle, lancer la fonction qui va mettre à jour le prixTotal et le nombre total D'article
 }
 /****/
 
 //Gestion du formulaire contact
 const maskNameAndCity = /^[a-zA-Z^\-\s]{2,}$/g // comporte des lettres maj ou min ou "-" ou " " et 2 caractères min
 const maskAddress = /^[a-zA-Z0-9àâäéèêëïîôöùûüç\s-]{5,}$/g //comporte au minimum 5 lettres, chiffres ou "-" (sans compter les espaces qui sont acceptés)
-const maskMail = /^[a-zA-Z0-9àâäéèêëïîôöùûüç\.\-\s-]{2,}[@][\w]{2,}[\.][a-zA-Z]{2,}$/g // 2 caractères min avant le "@" puis 2 lettres ou chiffres min après le @ puis 2 lettres min uniquement après le "."
+const maskMail = /^[a-zA-Z0-9àâäéèêëïîôöùûüç\.\-\_\s-]{2,}[@][\w]{2,}[\.][a-zA-Z]{2,}$/g // 2 caractères min (".","-"" et "_" acceptés) avant le "@" puis 2 lettres ou chiffres min après le @ puis 2 lettres min uniquement après le "."
 
 const nbreInput = document.querySelectorAll(".cart__order__form__question")//Rescencement des Inputs dans le formulaire
 
@@ -210,12 +206,13 @@ nbreInput.forEach((item) =>{
 
 //Gestion envoi datas au backEnd
 const formContact = document.querySelector(".cart__order__form")
-formContact.addEventListener("submit",(e) =>{
+formContact.addEventListener("submit",(e) =>{//Ecoute du clic de l'input "commander"
     let arrayBackEndProducts = []
     for (let i = 0; i < arrayBasketProducts.length; i++){
         arrayBackEndProducts.push(arrayBasketProducts[i].id)
     }
 
+//Formatage de l'objet à envoyer au backEnd
     const orderForm = {
         contact : {
         "firstName" : document.getElementById("firstName").value,
@@ -226,9 +223,11 @@ formContact.addEventListener("submit",(e) =>{
            },
         "products" : arrayBackEndProducts,
     }
-    console.log(orderForm)
-    e.preventDefault()
-    
+/****/
+
+    e.preventDefault()//Evite que la page cart.html ne se rafraîchisse
+
+//Options de la requête fetch
     const optionsRequest = {
         method: 'POST', 
         body: JSON.stringify(orderForm),
@@ -236,20 +235,20 @@ formContact.addEventListener("submit",(e) =>{
             "Accept": "application/json", 
             "Content-Type": "application/json"},
     }
+/****/
 
-    console.log(orderForm)
+//Requête Fetch pour obtention de l'"idOrder" si le LS n'est pas vide
     if (arrayBasketProducts.length > 0){
         fetch("http://localhost:3000/api/products/order", optionsRequest)
             .then(response => response.json())
             .then(data => {
-                console.log(data.orderId)
-                localStorage.clear()
-                document.location = `./confirmation.html?orderId=${data.orderId}`
-
+                localStorage.clear()//Suppression de produits dans le LS
+                document.location = `./confirmation.html?orderId=${data.orderId}`//Ouverture la page confirmation avec l'"idOrder" dans l'URL
             })
             .catch((error) => alert('Erreur Serveur : '+ error)) // Alerte erreur serveur
     }else{
-        alert("Vous devez commander minimum 1 produit")
+        alert("Votre panier est vide.Vous devez commander minimum 1 produit")
     }
-
+/****/
 })
+/****/
