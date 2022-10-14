@@ -155,17 +155,18 @@ function showCart(){
 /****/
 
 //Gestion du formulaire contact
-const maskNameAndCity = /^[a-zA-Z^\-\s]{2,}$/g // comporte des lettres maj ou min ou "-" ou " " et 2 caractères min
+const maskNameAndCity = /^[a-zA-Z^\àâäéèêëïîôöùûüç\-\s]{2,}$/g // comporte des lettres maj ou min ou "-" ou " " et 2 caractères min
 const maskAddress = /^[a-zA-Z0-9àâäéèêëïîôöùûüç\s-]{5,}$/g //comporte au minimum 5 lettres, chiffres ou "-" (sans compter les espaces qui sont acceptés)
-const maskMail = /^[a-zA-Z0-9àâäéèêëïîôöùûüç\.\-\_\s-]{2,}[@][\w]{2,}[\.][a-zA-Z]{2,}$/g // 2 caractères min (".","-"" et "_" acceptés) avant le "@" puis 2 lettres ou chiffres min après le @ puis 2 lettres min uniquement après le "."
+const maskMail = /^[a-zA-Z0-9àâäéèêëïîôöùûüç\._\-]{2,}[@][\w]{2,}[\.][a-zA-Z]{2,}$/g // 2 caractères min (".","-"" et "_" acceptés) avant le "@" puis 2 lettres ou chiffres min après le @ puis 2 lettres min uniquement après le "."
 
 const nbreInput = document.querySelectorAll(".cart__order__form__question")//Rescencement des Inputs dans le formulaire
 
+
+
 nbreInput.forEach((item) =>{
-    item.addEventListener("change",el => {//Surveillance évènement sur chaque input
+    item.addEventListener("input", el => {//Surveillance évènement sur chaque input
         const valueInput = el.target.closest("input").value//Valeur du champ input
         const idInput = el.target.closest("input").getAttribute("id")//Recherche de l'attribut de l'input modifié
-
 //Controle champs Prénom, Nom ou Ville
         if (idInput === "firstName" || idInput === "lastName" || idInput === "city"){
             if (valueInput.match(maskNameAndCity)){//Vérication du formatage du champ
@@ -238,17 +239,30 @@ formContact.addEventListener("submit",(e) =>{//Ecoute du clic de l'input "comman
 /****/
 
 //Requête Fetch pour obtention de l'"idOrder" si le LS n'est pas vide
-    if (arrayBasketProducts.length > 0){
-        fetch("http://localhost:3000/api/products/order", optionsRequest)
-            .then(response => response.json())
-            .then(data => {
-                localStorage.clear()//Suppression de produits dans le LS
-                document.location = `./confirmation.html?orderId=${data.orderId}`//Ouverture la page confirmation avec l'"idOrder" dans l'URL
-            })
-            .catch((error) => alert('Erreur Serveur : '+ error)) // Alerte erreur serveur
+//Déclaration constantes pour obtenir les valeurs de chaque champs du formulaire
+const firstNameFormValue = document.getElementById("firstName").value
+const lastNameFormValue = document.getElementById("lastName").value
+const addressFormValue = document.getElementById("address").value
+const cityFormValue = document.getElementById("city").value
+const emailFormValue = document.getElementById("email").value
+/****/
+
+    if (firstNameFormValue =="" || lastNameFormValue=="" || addressFormValue=="" || cityFormValue=="" || emailFormValue==""){//Vérification qu'aucun champ du formulaire n'est vide
+        alert("Le formulaire est incomplet. Veuillez remplir tous les champs du formulaire")
     }else{
-        alert("Votre panier est vide.Vous devez commander minimum 1 produit")
-    }
+        if (arrayBasketProducts.length > 0 && firstNameFormValue!= "" && lastNameFormValue!="" && addressFormValue!="" && cityFormValue!="" && emailFormValue!="" ){//Condition pour l'envoi au backEnd : localStorage et champs du formulaire non vides
+            fetch("http://localhost:3000/api/products/order", optionsRequest)
+                .then(response => response.json())
+                .then(data => {
+                    localStorage.clear()//Suppression de produits dans le LS
+                    document.location = `./confirmation.html?orderId=${data.orderId}`//Ouverture la page confirmation avec l'"idOrder" dans l'URL
+                })
+                .catch((error) => alert('Erreur Serveur : '+ error)) // Alerte erreur serveur
+        }else{
+            alert("Votre panier est vide. Vous devez commander minimum 1 produit")
+        }
+    
+  }   
 /****/
 })
 /****/
