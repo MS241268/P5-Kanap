@@ -1,7 +1,6 @@
 const parameter = (new URL(document.location)).searchParams//Chargement des paramètres de l'URL
 const idCurrentPageProduct = parameter.get("id")//Recherche du parametre "id" dans l'URL
 const urlApi = `http://localhost:3000/api/products/${idCurrentPageProduct}`//Chargement des caractéristiques du produit depuis l'API
-let arrayProductsLs = []//Initialisation du tableau dans le localStorage
 
 // Obtention des données d'un produit
 fetch(urlApi)
@@ -9,16 +8,21 @@ fetch(urlApi)
         response.json()
         
     .then((dataProduct) => {
-        document.title = dataProduct.name
+        document.title = dataProduct.name//Nom de l'onglet de la page product.html
         document.querySelector(".item__img").innerHTML = `<img src=${dataProduct.imageUrl} alt="${dataProduct.altTxt}">`//Implémentation de l'image du produit dans la page produit.html
-        document.querySelector("#title").innerText = dataProduct.name//Implémentation du nom du produit dans la page produit.html
-        document.querySelector("#price").innerText = dataProduct.price//Implémentation du prix du produit dans la page produit.html
-        document.querySelector("#description").innerText = dataProduct.description//Implémentation de la description du produit dans la page produit.html
+        document.querySelector("#title").innerText = dataProduct.name//Implémentation du nom du produit dans la page product.html
+        document.querySelector("#price").innerText = dataProduct.price//Implémentation du prix du produit dans la page product.html
+        document.querySelector("#description").innerText = dataProduct.description//Implémentation de la description du produit dans la page product.html
         
         //Gestion des options de couleurs du produit sélectionné
         for(let colorsProduct of dataProduct.colors){ // Boucle pour connaître les couleurs du produit sélectionné
-            const listColorProduct = document.getElementById("colors")//Liste des couleurs dispos selon le produit
-            listColorProduct.insertAdjacentHTML("beforeend", `<option value="${colorsProduct}">${colorsProduct}</option>`)}//Implémentation des couleurs dans le menu déroulant      
+            //Implémentation des couleurs dans le menu déroulant
+                const elemOption = document.createElement('option')//Création de l'élément "option"
+                    elemOption.value = `${colorsProduct}`//Attribut "value" de l'élément "option"
+                    const colorOption = document.createTextNode(`${colorsProduct}`)//Couleurs disponibles pour le produit
+                elemOption.appendChild(colorOption)
+            document.getElementById("colors").appendChild(elemOption)
+            }      
         })
         ).catch((error) => alert("Erreur Serveur : " + error)) // Alerte erreur serveur
         
@@ -51,18 +55,19 @@ addBasket.addEventListener('click',() => {
         image : imageProduct,
     }
 
+    let arrayProductsLs = []//Initialisation du tableau dans le localStorage
+
     if (localStorage.getItem("basketProducts") == null){//Vérification si le localStorage est vide
         if (recapProduct.quantity > 0 && recapProduct.quantity <= 100 ){
             arrayProductsLs.push(recapProduct)
             localStorage.setItem("basketProducts", JSON.stringify(arrayProductsLs))//Ajout du 1er produit dans le localStorage
             alert("Produit(s) ajouté(s) dans votre panier")
         }
-    }else{
-        let arrayProductsLs = JSON.parse(localStorage.getItem("basketProducts"))
+    }else{//Si le localstorage n'est pas vide
+        let arrayProductsLs = JSON.parse(localStorage.getItem("basketProducts"))//Chargement des éléments du localStorage
         let foundIdProduct = arrayProductsLs.find(p => p.id == recapProduct.id)//Vérification si l'Id produit existe dans le localStorage
         let foundColorProduct = arrayProductsLs.find(c => c.color == recapProduct.color)//Vérification si la couleur produit existe dans le localStorage
-     
-        if (foundIdProduct != undefined && foundColorProduct != undefined){//Condition si le produit de la même couleur existe dans le localStorage
+        if (foundIdProduct!= undefined && foundColorProduct != undefined){//Condition si le produit de la même couleur existe dans le localStorage
             for(let i = 0; i < arrayProductsLs.length; i++){//Boucle pour séléctionner le bon Id produit avec la bonne couleur
                 if (arrayProductsLs[i].id == recapProduct.id && arrayProductsLs[i].color == recapProduct.color){//Vérification du bon Id produit et de la bonne couleur
                     arrayProductsLs[i].quantity = arrayProductsLs[i].quantity + recapProduct.quantity
@@ -74,7 +79,7 @@ addBasket.addEventListener('click',() => {
                 alert("Produit(s) ajouté(s) dans votre panier")
                 }
             }
-        }else{//Condition si nouveau produit
+        }else{//Condition si nouveau produit non présent dans le localStorage
             (recapProduct.quantity > 0 && recapProduct.quantity <= 100)
             arrayProductsLs.push(recapProduct)
             localStorage.setItem("basketProducts", JSON.stringify(arrayProductsLs))//Ajout du nouveau produit dans le localStorage
@@ -83,6 +88,3 @@ addBasket.addEventListener('click',() => {
     }
     }
 })
-
-
-
